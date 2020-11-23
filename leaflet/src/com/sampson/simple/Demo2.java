@@ -1,4 +1,4 @@
-package sampson.simple;
+package com.sampson.simple;
 
 import java.util.HashMap;
 import java.util.Map;

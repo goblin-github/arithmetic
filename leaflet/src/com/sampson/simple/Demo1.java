@@ -1,4 +1,4 @@
-package sampson.simple;
+package com.sampson.simple;
 
 /**
  * A+B Problem
