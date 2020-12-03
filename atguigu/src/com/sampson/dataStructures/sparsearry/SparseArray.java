@@ -2,6 +2,8 @@ package com.sampson.dataStructures.sparsearry;
 
 import com.sun.xml.internal.bind.v2.TODO;
 
+import java.io.*;
+
 public class SparseArray {
     public static void main(String[] args) {
         // 创建一个原始的二维数组 11 * 11
@@ -78,6 +80,72 @@ public class SparseArray {
             }
             System.out.println();
         }
-        //TODO 需实现的功能：将稀疏数组存入磁盘
+        //TODO 将稀疏数组存入磁盘
+        System.out.println();
+        System.out.println("将稀疏数组存入磁盘中");
+        //这里将文件保存在项目中
+        File f = new File("atguigu/file");
+        //判断该目录是否存在，不存在就创建
+        if (!f.exists()) {
+            f.mkdir();
+        }
+        File data = new File("atguigu/file/map.text");
+        FileOutputStream out = null;
+        OutputStreamWriter osw = null;
+        try {
+            out = new FileOutputStream(data);
+            osw = new OutputStreamWriter(out, "UTF-8");
+            System.out.println("写入中-------------------");
+            for (int i = 0; i < sparseArr_length; i++) {
+                osw.write(sparseArr[i][0] + "," + sparseArr[i][1] + "," + sparseArr[i][2] + ",");
+            }
+            osw.close();
+            out.close();
+            System.out.println("写入磁盘成功--------------");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        //TODO 从磁盘中读取稀疏数组
+        System.out.println();
+        System.out.println("从磁盘中读取稀疏数组");
+        File file = new File("atguigu/file/map.text");
+        FileInputStream in = null;
+        InputStreamReader inputStreamReader = null;
+        try {
+            in = new FileInputStream(file);
+            inputStreamReader = new InputStreamReader(in, "UTF-8");
+            StringBuilder builder = new StringBuilder();
+            while (inputStreamReader.ready()) {
+                builder.append((char) inputStreamReader.read());
+            }
+            inputStreamReader.close();
+            in.close();
+            System.out.println("读取成功");
+            String ss = builder.toString();
+            String[] split = ss.split(",");
+            //恢复稀疏数组
+            int sum1 = 0;
+            int[][] sparseArr1 = new int[split.length / 3][3];
+            sparseArr1[0][0] = Integer.parseInt(split[0]);
+            sparseArr1[0][1] = Integer.parseInt(split[1]);
+            sparseArr1[0][2] = Integer.parseInt(split[2]);
+            for (int i = 3; i < split.length; i += 3) {
+                sum1++;
+                sparseArr1[sum1][0] = Integer.parseInt(split[i]);
+                sparseArr1[sum1][1] = Integer.parseInt(split[i + 1]);
+                sparseArr1[sum1][2] = Integer.parseInt(split[i + 2]);
+            }
+            System.out.println("还原后的稀疏数组为：");
+            int sparseArr1_length = sparseArr1.length;
+            for (int i = 0; i < sparseArr1_length; i++) {
+                System.out.printf("%d\t%d\t%d\t\n", sparseArr1[i][0], sparseArr1[i][1], sparseArr1[i][2]);
+            }
+            System.out.println();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
     }
 }
