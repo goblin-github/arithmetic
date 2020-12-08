@@ -1,5 +1,7 @@
 package com.sampson.dataStructures.linkedlist;
 
+import java.util.Stack;
+
 /**
  * @Description: 单链表的实现
  * @Date: 2020-12-7 21:45
@@ -194,17 +196,18 @@ public class SingleLinkedList {
 
         /**
          * 面试题：获取单链表的节点的个数（如果是带头结点的链表，需求不统计头节点）
+         *
          * @param head
          * @return
          */
-        public int getLength(HeroNode head){
-            if(head.next == null){//空链表
+        public int getLength(HeroNode head) {
+            if (head.next == null) {//空链表
                 return 0;
             }
             int length = 0;
             //定义一个辅助变量，这里我们没有同意头节点
             HeroNode cur = head.next;
-            while (cur != null){
+            while (cur != null) {
                 length++;
                 cur = cur.next;//遍历
             }
@@ -219,26 +222,27 @@ public class SingleLinkedList {
          * 3.先把链表从头到尾遍历，得到链表的总长度getLength
          * 4.得到size后，我们从链表的第一个开始遍历（size-index）个，就可以得到
          * 5.如果找到了就返回该节点，否则返回null
+         *
          * @param head
          * @param index
          * @return
          */
-        public HeroNode findLastIndexNode(HeroNode head,int index){
+        public HeroNode findLastIndexNode(HeroNode head, int index) {
             //判断如果链表为空，返回null
-            if (head.next==null){
+            if (head.next == null) {
                 return null;
             }
             //第一次遍历得到链表的长度（节点个数）
             int length = getLength(head);
             //第二次遍历（size-index）位置，就是我们倒数的第k个结点
             //先做一个index的校验
-            if (index>length||index<=0){
+            if (index > length || index <= 0) {
                 return null;
             }
             //定义辅助变量。for循环定位到倒数的index
             HeroNode cur = head.next;
             for (int i = 0; i < length - index; i++) {
-                cur=cur.next;
+                cur = cur.next;
             }
             return cur;
 
@@ -246,27 +250,53 @@ public class SingleLinkedList {
 
         /**
          * 腾讯面试题：单链表的反转
+         *
          * @param head
          */
-        public void reversetList(HeroNode head){
+        public void reversetList(HeroNode head) {
             //如果当前链表为空，或者只有一个节点，无需反转，直接返回
-            if(head.next==null||head.next.next==null){
+            if (head.next == null || head.next.next == null) {
                 return;
             }
             //定义一个辅助的指针（变量），帮助我们遍历原来的链表
             HeroNode cur = head.next;
             HeroNode next = null;//指向当前节点[cur]的下一个节点
-            HeroNode reverseHead = new HeroNode(0,"","");
+            HeroNode reverseHead = new HeroNode(0, "", "");
             //遍历原来的链表，每遍历一个节点就将其取出，并放在新的链表的最前端
-            while (cur!=null){
+            while (cur != null) {
                 next = cur.next;//先暂时保存当前节点的下一个节点，因为后面需要使用
-                cur.next=reverseHead.next;//将cur的下一个节点指向新的链表的最前端
+                cur.next = reverseHead.next;//将cur的下一个节点指向新的链表的最前端
                 reverseHead.next = cur;//将cur连接到新的链表上
                 cur = next;//让cur后移
             }
             //将head.next指向reverseHead.next，实现单链表的反转
-            head.next=reverseHead.next;
+            head.next = reverseHead.next;
         }
+    }
+
+    /**
+     * 百度面试题：从尾到头打印单链表（要求：方式1.反向遍历   方式2.Stack栈）
+     * 方式1：先将单链表进行反转操作然后再遍历打印即可，这样做会破坏原来的单链表的结构，不建议
+     * 方式2：可以利用栈这个数据结构，将各个节点压入栈中，然后利用栈的先进后出的特点，实现逆序打印
+     *
+     * @param head
+     */
+    public void reversePrint(HeroNode head) {
+        if (head.next == null) {
+            return;//空链表，不能打印
+        }
+        //创建一个栈，将各个节点压入栈
+        Stack<HeroNode> stack = new Stack<>();
+        HeroNode cur = head.next;
+        while (cur != null) {
+            HeroNode push = stack.push(cur);
+            cur = cur.next;
+        }
+        //将栈中的节点进行打印
+        while (stack.size() > 0) {
+            System.out.println(stack.pop());
+        }
+
     }
 
     //定义HeroNode，每个HeadNode对象就是一个节点
