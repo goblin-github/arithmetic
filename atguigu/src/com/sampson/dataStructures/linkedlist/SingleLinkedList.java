@@ -1,5 +1,7 @@
 package com.sampson.dataStructures.linkedlist;
 
+import sun.jvm.hotspot.memory.HeapBlock;
+
 import java.util.Stack;
 
 /**
@@ -11,10 +13,14 @@ public class SingleLinkedList {
         //进行测试
         //先创建节点
         HeroNode hero1 = new HeroNode(1, "宋江", "及时雨");
-        HeroNode hero2 = new HeroNode(2, "卢俊义", "玉麒麟");
-        HeroNode hero3 = new HeroNode(3, "吴用", "智多星");
-        HeroNode hero4 = new HeroNode(4, "林冲", "豹子头");
+        HeroNode hero2 = new HeroNode(4, "卢俊义", "玉麒麟");
+        HeroNode hero3 = new HeroNode(5, "吴用", "智多星");
+        HeroNode hero4 = new HeroNode(7, "林冲", "豹子头");
         SingleLinked singleLinked = new SingleLinked();
+        HeroNode hero5 = new HeroNode(4, "44", "及时雨");
+        HeroNode hero6 = new HeroNode(2, "22", "玉麒麟");
+        HeroNode hero7 = new HeroNode(8, "88", "智多星");
+        SingleLinked singleLinked2 = new SingleLinked();
         //加入
         // singleLinked.add(hero1);
         // singleLinked.add(hero4);
@@ -25,18 +31,23 @@ public class SingleLinkedList {
         singleLinked.addByOrder(hero4);
         singleLinked.addByOrder(hero2);
         singleLinked.addByOrder(hero3);
+        singleLinked2.addByOrder(hero5);
+        singleLinked2.addByOrder(hero6);
+        singleLinked2.addByOrder(hero7);
         //显示一把
-        singleLinked.list();
+        //singleLinked.list();
+       // singleLinked2.list();
+        merge(singleLinked.head,singleLinked2.head);
         //测试修改节点的代码
-        HeroNode newHeroNode = new HeroNode(2, "小卢", "玉麒麟~~");
-        singleLinked.update(newHeroNode);
+       // HeroNode newHeroNode = new HeroNode(2, "小卢", "玉麒麟~~");
+        //singleLinked.update(newHeroNode);
         //System.out.println("修改后的链表情况~~");
-        singleLinked.list();
+   //     singleLinked.list();
         //删除一个节点
-        singleLinked.del(1);
-        singleLinked.del(4);
-        System.out.println("删除后的链表情况~~");
-        singleLinked.list();
+//        singleLinked.del(1);
+//        singleLinked.del(4);
+//        System.out.println("删除后的链表情况~~");
+//        singleLinked.list();
     }
 
     /**
@@ -272,32 +283,76 @@ public class SingleLinkedList {
             //将head.next指向reverseHead.next，实现单链表的反转
             head.next = reverseHead.next;
         }
-    }
+        /**
+         * 百度面试题：从尾到头打印单链表（要求：方式1.反向遍历   方式2.Stack栈）
+         * 方式1：先将单链表进行反转操作然后再遍历打印即可，这样做会破坏原来的单链表的结构，不建议
+         * 方式2：可以利用栈这个数据结构，将各个节点压入栈中，然后利用栈的先进后出的特点，实现逆序打印
+         *
+         * @param head
+         */
+        public void reversePrint(HeroNode head) {
+            if (head.next == null) {
+                return;//空链表，不能打印
+            }
+            //创建一个栈，将各个节点压入栈
+            Stack<HeroNode> stack = new Stack<>();
+            HeroNode cur = head.next;
+            while (cur != null) {
+                HeroNode push = stack.push(cur);
+                cur = cur.next;
+            }
+            //将栈中的节点进行打印
+            while (stack.size() > 0) {
+                System.out.println(stack.pop());
+            }
 
+        }
+
+
+    }
     /**
-     * 百度面试题：从尾到头打印单链表（要求：方式1.反向遍历   方式2.Stack栈）
-     * 方式1：先将单链表进行反转操作然后再遍历打印即可，这样做会破坏原来的单链表的结构，不建议
-     * 方式2：可以利用栈这个数据结构，将各个节点压入栈中，然后利用栈的先进后出的特点，实现逆序打印
-     *
-     * @param head
+     * 面试题：合并两个有序的单链表，合并和的新链表依然有序
+     * @param head1
+     * @param head2
      */
-    public void reversePrint(HeroNode head) {
-        if (head.next == null) {
-            return;//空链表，不能打印
+    public static HeroNode merge(HeroNode head1, HeroNode head2) {
+        //先做判断，这里分为三种情况，链表1为空2不为空；链表1不为空2为空；链表12都为空
+        if (head1.next == null) {
+            if (head2.next == null) {
+                return null;
+            }
+            return head2;
+        } else {
+            if (head2.next == null) {
+                return head1;
+            }
         }
-        //创建一个栈，将各个节点压入栈
-        Stack<HeroNode> stack = new Stack<>();
-        HeroNode cur = head.next;
-        while (cur != null) {
-            HeroNode push = stack.push(cur);
-            cur = cur.next;
+        //定义一个新的链表
+        HeroNode newHead = new HeroNode(0, "", "");
+        //定义一个变量来记录新的链表的头节点，用来方法的返回
+        HeroNode mergeHead = newHead;
+        HeroNode next = head1.next;
+        HeroNode next1 = head2.next;
+        while (next != null && next1 != null) {
+            if (next.no <= next1.no) {
+                mergeHead.next = next;
+                next = next.next;
+            } else {
+                mergeHead.next = next1;
+                next1 = next1.next;
+            }
+            mergeHead = mergeHead.next;
         }
-        //将栈中的节点进行打印
-        while (stack.size() > 0) {
-            System.out.println(stack.pop());
-        }
-
+        //如果有任何一个链表为空，那么就把其余的链表全部放在新链表的最后
+        mergeHead.next=next==null?next1:next;
+        //因为头节点不能动，因此我们需要一个辅助变量来遍历
+        SingleLinked linked = new SingleLinked();
+        linked.head=newHead;
+        linked.list();
+        return newHead;
     }
+
+
 
     //定义HeroNode，每个HeadNode对象就是一个节点
     static class HeroNode {
