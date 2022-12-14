@@ -1,8 +1,6 @@
 package com.sampson.dataStructures.linkedlist;
 
-import com.sampson.dataStructures.linkedlist.pojo.DoubleHeroNode;
 import com.sampson.dataStructures.linkedlist.pojo.SingleHeroNode;
-import sun.jvm.hotspot.memory.HeapBlock;
 
 import java.util.Stack;
 

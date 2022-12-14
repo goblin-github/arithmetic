@@ -1,7 +1,6 @@
 package com.sampson.dataStructures.linkedlist;
 
 import com.sampson.dataStructures.linkedlist.pojo.DoubleHeroNode;
-import com.sun.org.apache.regexp.internal.RE;
 
 /**
  * @author Sampson
